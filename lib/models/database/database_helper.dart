@@ -42,12 +42,31 @@ class DatabaseHelper {
         age INTEGER NOT NULL
       )
     ''');
+    await db.execute('''
+      CREATE TABLE payments(
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        data TEXT NOT NULL,
+        status BOOLEAN NOT NULL
+      )
+    ''');
   }
 
   // CRUD Operations
+  Future insertPayment({required Map data}) async {
+    final db = await instance.database;
+    await db.rawInsert(
+        'INSERT INTO payments(data, status) VALUES(?, ?)', [data, false]);
+  }
+
   Future<int> insertDog(Dog dog) async {
     final db = await instance.database;
     return await db.insert('dogs', dog.toMap());
+  }
+
+  Future getPayments() async {
+    final db = await instance.database;
+    final result = await db.rawQuery('SELECT * FROM payments');
+    return result;
   }
 
   Future<List<Dog>> getDogs() async {

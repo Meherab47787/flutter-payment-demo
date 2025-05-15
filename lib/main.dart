@@ -41,11 +41,20 @@ class _MyHomePageState extends State<MyHomePage> {
   void _incrementCounter() async {
     try {
       print("Increment called!");
-      final fido = Dog(name: 'Fido ${_counter + 1}', age: _counter + 1);
-      await DatabaseHelper.instance.insertDog(fido);
+      var paymentResponseData = {
+        'address': 'shurjopayVerificationModel.address',
+        'username': 'AppController.userName',
+        'tran_date': 'shurjopayVerificationModel.dateTime',
+      };
+
+      await DatabaseHelper.instance.insertPayment(data: paymentResponseData);
       setState(() {
         _counter++;
       });
+      // await DatabaseHelper.instance.insertDog(fido);
+      // setState(() {
+      //   _counter++;
+      // });
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Dog added successfully!')),
       );
@@ -59,14 +68,16 @@ class _MyHomePageState extends State<MyHomePage> {
   void _decrement() async {
     try {
       print("Decrement called!");
-      final dogs = await DatabaseHelper.instance.getDogs();
-      print(dogs);
+      final payments = await DatabaseHelper.instance.getPayments();
+      print(payments);
+      // final dogs = await DatabaseHelper.instance.getDogs();
+      // print(dogs);
       setState(() {
         if (_counter > 0) _counter--;
       });
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Found ${dogs.length} dogs')),
-      );
+      // ScaffoldMessenger.of(context).showSnackBar(
+      //   SnackBar(content: Text('Found ${dogs.length} dogs')),
+      // );
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Error fetching dogs: $e')),
@@ -105,7 +116,6 @@ class _MyHomePageState extends State<MyHomePage> {
                 tooltip: 'Increment',
                 child: const Icon(Icons.add),
               ),
-
               FloatingActionButton(
                 onPressed: _decrement,
                 tooltip: 'Increment',
