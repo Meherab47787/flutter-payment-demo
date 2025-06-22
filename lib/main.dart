@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_payment_demo/models/dog.dart';
 
@@ -47,7 +49,7 @@ class _MyHomePageState extends State<MyHomePage> {
         'tran_date': 'shurjopayVerificationModel.dateTime',
       };
 
-      await DatabaseHelper.instance.insertPayment(data: paymentResponseData);
+      await DatabaseHelper.instance.insertPayment(data: jsonEncode(paymentResponseData));
       setState(() {
         _counter++;
       });
@@ -69,7 +71,7 @@ class _MyHomePageState extends State<MyHomePage> {
     try {
       print("Decrement called!");
       final payments = await DatabaseHelper.instance.getPayments();
-      print(payments);
+      print(jsonDecode(payments[0]['data']));
       // final dogs = await DatabaseHelper.instance.getDogs();
       // print(dogs);
       setState(() {
@@ -79,9 +81,7 @@ class _MyHomePageState extends State<MyHomePage> {
       //   SnackBar(content: Text('Found ${dogs.length} dogs')),
       // );
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Error fetching dogs: $e')),
-      );
+      print(e);
     }
   }
 

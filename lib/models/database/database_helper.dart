@@ -52,7 +52,7 @@ class DatabaseHelper {
   }
 
   // CRUD Operations
-  Future insertPayment({required Map data}) async {
+  Future insertPayment({required data}) async {
     final db = await instance.database;
     await db.rawInsert(
         'INSERT INTO payments(data, status) VALUES(?, ?)', [data, false]);
